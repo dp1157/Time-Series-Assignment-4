@@ -1,0 +1,88 @@
+---
+title: "4 Assignment"
+author: "Deepshika Potluri"
+date: "2025-02-28"
+output: html_document
+---
+
+```{r}
+
+library(forecast)
+
+# load in the data
+tourism <- read.csv("/Users/deepshikapotluri/Documents/Tourism.csv", header = FALSE)
+
+# converting unemployment_rate_data$unrate into time series model(monthly)
+ts_tour <- ts(tourism$Trips, start = c(1998, 01), frequency = 4)
+
+
+# exploratory analysis 
+# plot 
+plot(ts_tour, type = "l", xlab = "Time", ylab = "Trips", main = "Trips Over Time")
+# Observations: There are clearly years where there are more trips and there are very significant peaks to the plot. For the most part there looks to be seasonality over the years as there are certain yeasr with higher amount of trips.
+     
+# ACF
+acf(tourism$Trips, main = "ACF of Trips")
+# Observations: All of the data is significant and there seems to be a downward trend in the data. There are also patterns that follow 
+
+# decomp
+ets_tour <- ets(ts_tour)
+plot(ets_tour)
+attributes(ets_tour)
+ets_tour$mse
+# Observations: There is definitely seasonality in the data however the larger peaks and fluctautions dont seem to follow seasonality. Al three graphs look very similar and seasonality is the smallest. The level plot has the most peaks and most spread. 
+
+
+# time series & diff forecasts 
+# forecasts
+mean_tour <- meanf(ts_tour,12)
+plot(mean_tour)
+# Description:
+
+naive_tour <- naive(ts_tour,12)
+plot(naive_tour)
+# Description:A naive model is a simple forecasting method that assumes the next value in a time series will be equal to the most recent observed value. This approach is often used as a baseline to compare against more complex models, especially when the data exhibits strong trends or seasonality.
+
+rwf_tour <- rwf(ts_tour,12)
+plot(rwf_tour)
+rwf_tour
+# Description: The `rwf_tour` model, or random walk with drift, is a forecasting method that relies on historical data by assuming that future values will follow the same pattern as past observations, with possible random fluctuations. This approach is particularly useful when a time series exhibits a consistent trend over time, allowing for forecasts that reflect historical movements while incorporating random variations.
+
+snaive_tour <- snaive(ts_tour,12)
+plot(snaive_tour)
+# Description:The `snaive_tour` model, or seasonal naive forecast, extends the naive approach by incorporating historical seasonal patterns into its predictions. This model assumes that future values will mimic past values from the same season, making it particularly effective for time series data with strong recurring seasonal trends.
+
+MA12_tour <- ma(ts_tour,order=12)
+plot(MA5_tour)
+# Description: The `MA12_tour` model applies a moving average with a window size of 12, smoothing fluctuations by averaging the past 12 observations. This helps capture underlying trends while reducing short-term noise, making it useful for time series with seasonal patterns.
+
+MA24_tour <- ma(ts_tour,order=24)
+plot(MA24_tour)
+# Description: The `MA24_tour` model applies a moving average with a window size of 24, which smooths fluctuations by averaging the past 24 observations. This approach is useful for long-term trend analysis, as it reduces noise while capturing broader seasonal or cyclical patterns in the data.
+
+HW_tour <- HoltWinters(ts_tour)
+plot(HW_tour)
+# Description: The `HW_tour` model refers to the Holt-Winters method, which is a forecasting approach that accounts for level, trend, and seasonality in time series data. It is particularly useful for data with clear seasonal patterns, as it adapts to changing trends and cyclical fluctuations over time.
+
+plot(ts_tour, main = "Time Series and Forecasts", xlab = "Time", ylab = "Unemployment Rate")
+lines(mean_tour$mean, col="orange")
+lines(naive_tour$mean,col="red")
+lines(naive_tour$mean,col="green")
+lines(snaive_tour$mean,col="black")
+lines(MA5_tour,col="pink")
+lines(MA9_tour,col="blue")
+
+# best model
+# MAPE
+accuracy(mean_tour)
+accuracy(naive_tour)
+accuracy(rwf_tour)
+accuracy(rwf_tour)
+accuracy(snaive_tour)
+accuracy(forecast(MA12_tour, h=12))
+accuracy(forecast(MA24_tour, h=24))
+accuracy(forecast(HW_tour, h=12))
+# The most accurate model is the MA12 model. Normally you would look at the MAPE to figure out the best accuracy but there seems to be some that are infinite. So we look at the next best thing. The model with the lowest Root Mean Squared Error (RMSE) of 2.359, Mean Absolute Error (MAE) of 1.182, and Mean Absolute Scaled Error (MASE) of 0.157 demonstrates the best overall accuracy. If we only looked at the MAPE the best model would be the MA24 model because it has a MAPE of 0.461.
+
+
+```
