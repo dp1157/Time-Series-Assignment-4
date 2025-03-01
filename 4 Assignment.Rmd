@@ -41,7 +41,7 @@ plot(mean_tour)
 
 naive_tour <- naive(ts_tour,12)
 plot(naive_tour)
-# Description:A naive model is a simple forecasting method that assumes the next value in a time series will be equal to the most recent observed value. This approach is often used as a baseline to compare against more complex models, especially when the data exhibits strong trends or seasonality.
+# Description:A naive model is a simple forecasting method that assumes the next value in a time series will be equal to the most recent observed value. This approach is often used as a baseline to compare against more complex models, especially when the data exhibits strong trends or seasonality. It follows the pattern of a lot of paeaks and dips.
 
 rwf_tour <- rwf(ts_tour,12)
 plot(rwf_tour)
@@ -50,19 +50,19 @@ rwf_tour
 
 snaive_tour <- snaive(ts_tour,12)
 plot(snaive_tour)
-# Description:The `snaive_tour` model, or seasonal naive forecast, extends the naive approach by incorporating historical seasonal patterns into its predictions. This model assumes that future values will mimic past values from the same season, making it particularly effective for time series data with strong recurring seasonal trends.
+# Description:The `snaive_tour` model, or seasonal naive forecast, extends the naive approach by incorporating historical seasonal patterns into its predictions. This model assumes that future values will mimic past values from the same season, making it particularly effective for time series data with strong recurring seasonal trends. There is a lot sharper peaks and less oscillating.
 
 MA12_tour <- ma(ts_tour,order=12)
 plot(MA5_tour)
-# Description: The `MA12_tour` model applies a moving average with a window size of 12, smoothing fluctuations by averaging the past 12 observations. This helps capture underlying trends while reducing short-term noise, making it useful for time series with seasonal patterns.
+# Description: The `MA12_tour` model applies a moving average with a window size of 12, smoothing fluctuations by averaging the past 12 observations. This helps capture underlying trends while reducing short-term noise, making it useful for time series with seasonal patterns. There is a lot more smotthing and much less dips and it helps show the significant changes throughout time.
 
 MA24_tour <- ma(ts_tour,order=24)
 plot(MA24_tour)
-# Description: The `MA24_tour` model applies a moving average with a window size of 24, which smooths fluctuations by averaging the past 24 observations. This approach is useful for long-term trend analysis, as it reduces noise while capturing broader seasonal or cyclical patterns in the data.
+# Description: The `MA24_tour` model applies a moving average with a window size of 24, which smooths fluctuations by averaging the past 24 observations. This approach is useful for long-term trend analysis, as it reduces noise while capturing broader seasonal or cyclical patterns in the data. This has even less oscillating compared to the others.
 
 HW_tour <- HoltWinters(ts_tour)
 plot(HW_tour)
-# Description: The `HW_tour` model refers to the Holt-Winters method, which is a forecasting approach that accounts for level, trend, and seasonality in time series data. It is particularly useful for data with clear seasonal patterns, as it adapts to changing trends and cyclical fluctuations over time.
+# Description: The `HW_tour` model refers to the Holt-Winters method, which is a forecasting approach that accounts for level, trend, and seasonality in time series data. It is particularly useful for data with clear seasonal patterns, as it adapts to changing trends and cyclical fluctuations over time. There are some negative numbers so that means there is a lot of variability in the data.
 
 plot(ts_tour, main = "Time Series and Forecasts", xlab = "Time", ylab = "Unemployment Rate")
 lines(mean_tour$mean, col="orange")
